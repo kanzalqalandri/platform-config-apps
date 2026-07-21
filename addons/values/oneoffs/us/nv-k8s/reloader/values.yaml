@@ -1,6 +1,6 @@
-# PLACEMENT + values for the one-off reloader on gitops-c3.
+# PLACEMENT + values for the one-off reloader on nv-k8s.
 # The existence of this file (its path's cluster segment) is what deploys
-# charts/oneoffs/reloader to gitops-c3. Values below are optional per-cluster tuning;
+# charts/oneoffs/reloader to nv-k8s. Values below are optional per-cluster tuning;
 # an empty file would still place the chart here.
 reloader:
   deployment:

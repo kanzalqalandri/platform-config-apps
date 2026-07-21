@@ -1,6 +1,6 @@
 # Add-on for every PRIMARY cluster (databases live on primaries, not satellites).
 chartRepo: https://cloudnative-pg.github.io/charts
 chart: cloudnative-pg
-chartVersion: 0.29.0    # fleet default; gitops-c3 pins 0.28.0 via its addonOverrides
+chartVersion: 0.29.0    # fleet default; nv-k8s pins 0.28.0 via its addonOverrides
 namespace: cnpg-system
 syncWave: "-5"

@@ -1,4 +1,4 @@
-# Cluster-wide defaults for ALL tenants on gitops-c2.
+# Cluster-wide defaults for ALL tenants on dnv-k8s.
 # Sits above the global tenants/_base and below each tenant's own values.yaml.
 # Example: raise the baseline resource requests for everything on this cluster.
 resources:

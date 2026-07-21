@@ -1,7 +1,7 @@
 # ONE-OFF ops component — chart defined ONCE here (no cluster in the path).
 # WHERE it runs is decided on the values side: it deploys to each cluster that has
 # an addons/values/oneoffs/<cluster>/reloader/values.yaml placement file.
-# Currently placed on gitops-c3 (prod primary) only. Add another target = drop a
+# Currently placed on nv-k8s (us primary) only. Add another target = drop a
 # values file under that cluster; bump the version = edit THIS file once.
 # Stakater Reloader rolls Deployments/StatefulSets when their ConfigMaps/Secrets change.
 chartRepo: https://stakater.github.io/stakater-charts

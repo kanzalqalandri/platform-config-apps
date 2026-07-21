@@ -1,6 +1,6 @@
 # Add-on for every PRIMARY cluster.
 chartRepo: https://kedacore.github.io/charts
 chart: keda
-chartVersion: 2.20.1    # fleet default; gitops-c3 pins 2.18.3 via its addonOverrides
+chartVersion: 2.20.1    # fleet default; nv-k8s pins 2.18.3 via its addonOverrides
 namespace: keda
 syncWave: "-5"

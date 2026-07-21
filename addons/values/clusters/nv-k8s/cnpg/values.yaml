@@ -1,4 +1,4 @@
-# Per-cluster override for cnpg on gitops-c3 (layered over addons/values/defaults/cnpg).
+# Per-cluster override for cnpg on nv-k8s (layered over addons/values/defaults/cnpg).
 resources:
   requests:
     cpu: 125m
