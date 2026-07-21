@@ -1,0 +1,11 @@
+apiVersion: v2
+name: platform
+description: >-
+  The whole platform, rendered as plain ArgoCD Applications — no ApplicationSets.
+  The repo root IS a Helm chart: templates/ walks the plane directories
+  (clusters/, tenants/, addons/, powergrader/) with .Files.Glob and emits one
+  Application per leaf. Every hub installs THIS same chart via
+  hubs/<region>/root-app.yaml; the only per-hub difference is the `region`
+  value, which scopes everything to clusters/<region>/.
+  Preview exactly what a hub generates with:  helm template . --set region=dev
+version: 0.1.0

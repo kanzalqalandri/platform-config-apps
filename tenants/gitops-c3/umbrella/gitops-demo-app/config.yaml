@@ -1,0 +1,3 @@
+appRepoURL: https://github.com/kanzalqalandri/gitops-demo-app
+chartRevision: main
+helmPath: helm

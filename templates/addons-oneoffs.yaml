@@ -1,0 +1,47 @@
+# Add-on plane (one-offs) — chart defined ONCE under addons/charts/oneoffs/;
+# WHERE it runs = the clusters in THIS region that have a placement file
+# addons/values/oneoffs/<region>/<cluster>/<chart>/values.yaml.
+# Spec-identical to the cluster-addons ApplicationSet's second matrix.
+{{- if not .Values.region }}{{ fail "region is required" }}{{- end }}
+{{- range $chartPath, $_ := .Files.Glob "addons/charts/oneoffs/*/config.yaml" }}
+{{- $chart := $chartPath | dir | base }}
+{{- $cfg := $.Files.Get $chartPath | fromYaml }}
+{{- range $placePath, $_ := $.Files.Glob (printf "addons/values/oneoffs/%s/*/%s/values.yaml" $.Values.region $chart) }}
+{{- /* placement path: addons/values/oneoffs/<region>/<cluster>/<chart>/values.yaml -> cluster = segment 4 */}}
+{{- $cluster := index (splitList "/" $placePath) 4 }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: addon-{{ $cluster }}-{{ $chart }}
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ $cfg.syncWave | default "0" | quote }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+    - repoURL: {{ $cfg.chartRepo }}
+      chart: {{ $cfg.chart }}
+      targetRevision: {{ $cfg.chartVersion | quote }}
+      helm:
+        ignoreMissingValueFiles: true
+        valueFiles:
+          - $values/addons/values/defaults/{{ $chart }}/values.yaml
+          - $values/{{ $placePath | dir }}/values.yaml
+    - repoURL: {{ $.Values.repoURL }}
+      targetRevision: {{ $.Values.revision }}
+      ref: values
+  destination:
+    name: {{ $cluster }}
+    namespace: {{ $cfg.namespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true
+{{- end }}
+{{- end }}

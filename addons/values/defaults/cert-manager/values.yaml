@@ -1,0 +1,18 @@
+# Common cert-manager values for the whole fleet. Per-cluster overrides go in
+# addons/values/clusters/<cluster>/cert-manager/values.yaml (layered on top of this).
+crds:
+  enabled: true          # let the chart manage its CRDs (paired with ServerSideApply)
+resources:
+  requests:
+    cpu: 10m
+    memory: 32Mi
+webhook:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+cainjector:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi

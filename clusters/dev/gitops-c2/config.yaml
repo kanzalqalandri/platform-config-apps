@@ -1,0 +1,7 @@
+# Cluster registry entry — the single place this cluster's identity is declared.
+# The cluster-addons appset matrix-joins this with addons/{all,roles,clouds}/ to
+# decide WHAT runs here. The cluster must ALSO exist as an ArgoCD cluster Secret
+# named "gitops-c2" in the hub (see bootstrap/README.md) — registry file without
+# Secret leaves generated apps stuck on "cluster not found".
+cloud: aws
+role: satellite        # the dev/qa satellite cluster

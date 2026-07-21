@@ -1,0 +1,5 @@
+# Env-wide defaults for ALL apps in dev. Change once here -> every tenant/app.
+# Demonstrates DRY without a rendering engine (layered valueFiles, last wins).
+service:
+  type: ClusterIP
+  port: 80

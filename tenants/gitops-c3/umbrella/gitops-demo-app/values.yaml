@@ -1,0 +1,4 @@
+tenantName: umbrella
+image:
+  tag: "plain-text"
+replicaCount: 2

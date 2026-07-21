@@ -1,0 +1,7 @@
+# Common CloudNativePG operator values for the whole fleet. Chart installs its
+# CRDs (paired with ServerSideApply). Per-cluster overrides go in
+# addons/values/clusters/<cluster>/cnpg/values.yaml (layered on top of this).
+resources:
+  requests:
+    cpu: 25m
+    memory: 64Mi

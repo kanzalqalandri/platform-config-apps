@@ -1,0 +1,4 @@
+tenantName: initech
+image:
+  tag: "plain-text"
+replicaCount: 3

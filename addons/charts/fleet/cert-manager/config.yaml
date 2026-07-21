@@ -1,0 +1,6 @@
+# Add-on for EVERY cluster, regardless of role/cloud. Read by the cluster-addons appset.
+chartRepo: https://charts.jetstack.io
+chart: cert-manager
+chartVersion: v1.21.0   # fleet default; per-cluster pins live in clusters/<cluster>/config.yaml addonOverrides
+namespace: cert-manager
+syncWave: "-5"          # foundational controllers install early (negative waves first)

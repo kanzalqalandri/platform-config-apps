@@ -1,0 +1,23 @@
+# The blast-radius gate: one malformed plane file fails the WHOLE root render
+# (nothing gets deleted — new deploys just pause), so catch it before merge.
+# Also prints the app list per region, which doubles as a cheap "plan" output.
+name: render-check
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-helm@v4
+      - name: helm template both regions
+        run: |
+          set -e
+          for region in dev prod; do
+            helm template hub . --set region=$region > /tmp/render-$region.yaml
+            echo "== $region: $(grep -c '^kind: Application$' /tmp/render-$region.yaml) Applications"
+            grep '^  name: ' /tmp/render-$region.yaml | sort
+          done

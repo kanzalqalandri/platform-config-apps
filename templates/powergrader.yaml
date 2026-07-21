@@ -1,0 +1,49 @@
+# PowerGrader plane — one Application per powergrader/<cluster>/<env>/<app>/
+# leaf, for every cluster registered in THIS hub's region.
+# Spec-identical to the powergrader ApplicationSet in platform-config.
+{{- if not .Values.region }}{{ fail "region is required" }}{{- end }}
+{{- range $clusterPath, $_ := .Files.Glob (printf "clusters/%s/*/config.yaml" .Values.region) }}
+{{- $cluster := $clusterPath | dir | base }}
+{{- range $path, $_ := $.Files.Glob (printf "powergrader/%s/*/*/config.yaml" $cluster) }}
+{{- $seg := splitList "/" $path }}
+{{- $env := index $seg 2 }}
+{{- $app := index $seg 3 }}
+{{- $cfg := $.Files.Get $path | fromYaml }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: powergrader-{{ $env }}-{{ $app }}
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+    - repoURL: {{ $cfg.appRepoURL }}
+      targetRevision: {{ $cfg.chartRevision }}
+      path: {{ $cfg.helmPath }}
+      helm:
+        ignoreMissingValueFiles: true
+        valueFiles:
+          # ordered low -> high precedence (last wins)
+          - $values/powergrader/_base/values.yaml
+          - $values/powergrader/_base/{{ $app }}/values.yaml
+          - $values/{{ $path | dir }}/values.yaml
+    - repoURL: {{ $.Values.repoURL }}
+      targetRevision: {{ $.Values.revision }}
+      ref: values
+  destination:
+    name: {{ $cluster }}
+    namespace: powergrader-{{ $env }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        app.kubernetes.io/managed-by: argocd
+    syncOptions:
+      - CreateNamespace=true
+{{- end }}
+{{- end }}

@@ -1,0 +1,57 @@
+# Add-on plane (tier add-ons) — the registry join, written as a plain loop:
+# for each cluster in THIS hub's region, union the addon charts that apply to
+# it by TYPE (specificity ladder fleet < role < cloud), one Application each.
+# Spec-identical to the cluster-addons ApplicationSet's first matrix.
+{{- if not .Values.region }}{{ fail "region is required" }}{{- end }}
+{{- range $clusterPath, $_ := .Files.Glob (printf "clusters/%s/*/config.yaml" .Values.region) }}
+{{- $cluster := $clusterPath | dir | base }}
+{{- $registry := $.Files.Get $clusterPath | fromYaml }}
+{{- $tiers := list
+      "addons/charts/fleet/*/config.yaml"
+      (printf "addons/charts/roles/%s/*/config.yaml" $registry.role)
+      (printf "addons/charts/clouds/%s/*/config.yaml" $registry.cloud) }}
+{{- range $tierGlob := $tiers }}
+{{- range $path, $_ := $.Files.Glob $tierGlob }}
+{{- $addonDir := $path | dir }}
+{{- $addon := $addonDir | base }}
+{{- $cfg := $.Files.Get $path | fromYaml }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: addon-{{ $cluster }}-{{ $addon }}
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ $cfg.syncWave | default "0" | quote }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+    - repoURL: {{ $cfg.chartRepo }}
+      chart: {{ $cfg.chart }}
+      # tier default, unless this cluster's registry file pins the addon
+      targetRevision: {{ dig $addon "chartVersion" $cfg.chartVersion ($registry.addonOverrides | default dict) | quote }}
+      helm:
+        ignoreMissingValueFiles: true
+        valueFiles:
+          # ordered low -> high precedence (last wins). All under addons/values/.
+          - $values/addons/values/defaults/{{ $addon }}/values.yaml
+          - $values/{{ $addonDir | replace "addons/charts/" "addons/values/" }}/values.yaml
+          - $values/addons/values/clusters/{{ $cluster }}/{{ $addon }}/values.yaml
+    - repoURL: {{ $.Values.repoURL }}
+      targetRevision: {{ $.Values.revision }}
+      ref: values
+  destination:
+    name: {{ $cluster }}
+    namespace: {{ $cfg.namespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true             # large CRDs (cert-manager) exceed the annotation limit
+{{- end }}
+{{- end }}
+{{- end }}

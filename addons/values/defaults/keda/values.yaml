@@ -1,0 +1,11 @@
+# Common KEDA values for the whole fleet. Chart installs its CRDs by default.
+# Per-cluster overrides go in addons/values/clusters/<cluster>/keda/values.yaml (layered on top).
+resources:
+  operator:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+  metricServer:
+    requests:
+      cpu: 10m
+      memory: 64Mi

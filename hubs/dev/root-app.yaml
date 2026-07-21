@@ -1,0 +1,26 @@
+# Bootstrap for the DEV hub (ArgoCD on gitops-c1, manages the dev region).
+# Apply ONCE with kubectl on the hub; from then on the hub self-manages every
+# Application from git via this app-of-apps.
+# ⚠ App name is hub-dev ON PURPOSE (cutover adopts the live hub by name) —
+#   do NOT apply this while platform-config's hub-dev appsets are live.
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: hub-dev
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/kanzalqalandri/platform-config-apps
+    targetRevision: main
+    path: .
+    helm:
+      values: |
+        region: dev
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

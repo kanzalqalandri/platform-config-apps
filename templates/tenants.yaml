@@ -1,0 +1,52 @@
+# Tenant plane — one Application per tenants/<cluster>/<tenant>/<app>/ leaf,
+# for every cluster registered in THIS hub's region (clusters/<region>/).
+# Spec-identical to the tenants ApplicationSet in platform-config.
+{{- if not .Values.region }}{{ fail "region is required" }}{{- end }}
+{{- range $clusterPath, $_ := .Files.Glob (printf "clusters/%s/*/config.yaml" .Values.region) }}
+{{- $cluster := $clusterPath | dir | base }}
+{{- range $path, $_ := $.Files.Glob (printf "tenants/%s/*/*/config.yaml" $cluster) }}
+{{- $seg := splitList "/" $path }}
+{{- $tenant := index $seg 2 }}
+{{- $app := index $seg 3 }}
+{{- $cfg := $.Files.Get $path | fromYaml }}
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ $cluster }}-{{ $tenant }}-{{ $app }}
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  sources:
+    - repoURL: {{ $cfg.appRepoURL }}
+      targetRevision: {{ $cfg.chartRevision }}
+      path: {{ $cfg.helmPath }}
+      helm:
+        # per-cluster/per-app base files are optional — skip any that don't exist
+        ignoreMissingValueFiles: true
+        valueFiles:
+          # ordered low -> high precedence (last wins)
+          - $values/tenants/_base/values.yaml
+          - $values/tenants/_base/{{ $app }}/values.yaml
+          - $values/tenants/{{ $cluster }}/_base/values.yaml
+          - $values/tenants/{{ $cluster }}/_base/{{ $app }}/values.yaml
+          - $values/{{ $path | dir }}/values.yaml
+    - repoURL: {{ $.Values.repoURL }}
+      targetRevision: {{ $.Values.revision }}
+      ref: values
+  destination:
+    name: {{ $cluster }}
+    namespace: tenant-{{ $tenant }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    managedNamespaceMetadata:
+      labels:
+        app.kubernetes.io/managed-by: argocd
+    syncOptions:
+      - CreateNamespace=true
+{{- end }}
+{{- end }}

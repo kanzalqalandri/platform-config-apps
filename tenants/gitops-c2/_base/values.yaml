@@ -1,0 +1,7 @@
+# Cluster-wide defaults for ALL tenants on gitops-c2.
+# Sits above the global tenants/_base and below each tenant's own values.yaml.
+# Example: raise the baseline resource requests for everything on this cluster.
+resources:
+  requests:
+    cpu: 50m
+    memory: 48Mi

@@ -1,0 +1,4 @@
+# Defaults for gitops-demo-app across ALL dev tenants.
+replicaCount: 1
+image:
+  repository: nginxdemos/hello

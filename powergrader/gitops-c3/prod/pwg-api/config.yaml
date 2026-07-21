@@ -1,0 +1,3 @@
+appRepoURL: https://github.com/kanzalqalandri/pwg-api
+chartRevision: main
+helmPath: helm

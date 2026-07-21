@@ -1,0 +1,2 @@
+# Per-cluster override for cert-manager on gitops-c2 (layered over addons/values/defaults/cert-manager).
+replicaCount: 2

@@ -1,0 +1,12 @@
+# Cluster registry entry — see clusters/gitops-c2/config.yaml for the contract.
+cloud: aws
+role: primary          # the prod primary cluster
+# Optional per-cluster version pins (canary / hold-back). Key = addon dir name;
+# wins over the chartVersion in the addon's config.yaml for THIS cluster only.
+addonOverrides:
+  cert-manager:
+    chartVersion: v1.20.0   # held one minor behind the fleet default (v1.21.0)
+  cnpg:
+    chartVersion: 0.28.0    # pinned behind the fleet default (0.29.0)
+  keda:
+    chartVersion: 2.18.3    # pinned behind the fleet default (2.20.1)

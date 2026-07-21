@@ -1,0 +1,5 @@
+# Thin tenant override. The image.tag line is what the deploy workflow rewrites.
+tenantName: acme
+image:
+  tag: "latest"
+replicaCount: 1

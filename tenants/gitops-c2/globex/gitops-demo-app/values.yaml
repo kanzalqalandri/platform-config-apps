@@ -1,0 +1,4 @@
+tenantName: globex
+image:
+  tag: "plain-text"
+replicaCount: 2

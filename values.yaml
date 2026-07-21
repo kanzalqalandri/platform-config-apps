@@ -1,0 +1,7 @@
+# The hub's region — REQUIRED. Set by hubs/<region>/root-app.yaml.
+# Scopes every template to clusters/<region>/*/config.yaml (and one-off
+# placements to addons/values/oneoffs/<region>/).
+region: ""
+# Where the generated Applications point their $values ref (this repo).
+repoURL: https://github.com/kanzalqalandri/platform-config-apps
+revision: main

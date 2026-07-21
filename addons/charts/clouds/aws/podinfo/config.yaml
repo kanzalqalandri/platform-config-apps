@@ -1,0 +1,8 @@
+# Add-on for every AWS cluster. podinfo is a lightweight STAND-IN for a real
+# cloud-specific agent (e.g. aws-load-balancer-controller) to exercise the
+# clouds/ tier of the matrix generator in the demo.
+chartRepo: https://stefanprodan.github.io/podinfo
+chart: podinfo
+chartVersion: 6.14.0
+namespace: podinfo
+syncWave: "0"
