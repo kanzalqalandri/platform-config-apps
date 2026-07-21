@@ -1,0 +1,4 @@
+tenantName: hooli
+image:
+  tag: "plain-text"
+replicaCount: 1

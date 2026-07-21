@@ -1,10 +1,10 @@
-# Bootstrap for the DEV hub (ArgoCD on dnv-mgmt, manages dnv-k8s). Apply ONCE with kubectl on the
+# Bootstrap for the UK hub (ArgoCD on ALN-k8s, manages ITSELF). Apply ONCE with kubectl on the
 # hub; from then on the hub self-manages every Application from git via this
 # app-of-apps.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: hub-dev
+  name: hub-uk
   namespace: argocd
 spec:
   project: default
@@ -14,7 +14,7 @@ spec:
     path: .
     helm:
       values: |
-        region: dev
+        region: uk
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd

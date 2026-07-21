@@ -1,6 +1,9 @@
-# Cluster registry entry — see clusters/gitops-c2/config.yaml for the contract.
+# Cluster registry entry — the single place this cluster's identity is declared.
+# Region (us) = the PATH segment: the us hub (ArgoCD on NV-MGMT) owns this
+# cluster. The cluster must ALSO exist as a cluster Secret named "nv-k8s" in
+# that hub (see bootstrap/README.md).
 cloud: aws
-role: primary          # the prod primary cluster
+role: primary          # the US production primary
 # Optional per-cluster version pins (canary / hold-back). Key = addon dir name;
 # wins over the chartVersion in the addon's config.yaml for THIS cluster only.
 addonOverrides:

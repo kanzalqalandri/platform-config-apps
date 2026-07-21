@@ -16,7 +16,7 @@ jobs:
       - name: helm template both regions
         run: |
           set -e
-          for region in dev prod; do
+          for region in us dev uk eu; do
             helm template hub . --set region=$region > /tmp/render-$region.yaml
             echo "== $region: $(grep -c '^kind: Application$' /tmp/render-$region.yaml) Applications"
             grep '^  name: ' /tmp/render-$region.yaml | sort

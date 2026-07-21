@@ -1,0 +1,5 @@
+# Cluster registry entry — see clusters/us/nv-k8s/config.yaml for the contract.
+# ALN-k8s is the UK hub AND workload cluster: its own ArgoCD manages it via a
+# named in-cluster Secret ("aln-k8s" -> kubernetes.default.svc).
+cloud: aws
+role: primary          # the UK primary

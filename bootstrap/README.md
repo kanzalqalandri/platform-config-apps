@@ -4,8 +4,8 @@
 — including the cluster it runs on. All hubs reconcile from this one repo; each
 generates only its region's slice (`clusters/<region>/`).
 
-Demo: **dev hub** = ArgoCD on `gitops-c1`, manages `gitops-c2`.
-**prod hub** = ArgoCD on `gitops-c3`, manages `gitops-c3` itself.
+Demo fleet: **us hub** = NV-MGMT → `nv-k8s`; **dev hub** = dnv-mgmt → `dnv-k8s`;
+**uk hub** = ALN-k8s → itself (`aln-k8s`); **eu hub** = AFG-k8s → itself (`afg-k8s`).
 
 ## Standing up a hub
 

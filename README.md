@@ -27,7 +27,7 @@ clusters/  tenants/  addons/  powergrader/   # plane data — copied VERBATIM, z
 
 ```sh
 helm template hub . --set region=dev    # exactly what the dev hub generates
-helm template hub . --set region=prod   # exactly what the prod hub generates
+helm template hub . --set region=us     # exactly what the us hub generates (also: uk, eu)
 ```
 
 No spike appsets, no applying anything to a cluster to find out what a change
@@ -52,7 +52,7 @@ before merge, and `helm template | diff` against main is a real plan output.
 Everything else is deliberately identical: app names (`<cluster>-<tenant>-<app>`,
 `addon-<cluster>-<addon>`, `powergrader-<env>-<app>`), destinations, namespaces,
 values ladders, `$values` multi-source refs, sync policies, version-pin `dig`.
-Verified by render: dev = 9 apps, prod = 10 apps, matching the live hubs.
+Verified by render: us = 10, dev = 9, uk = 5, eu = 5 apps.
 
 ## Cutover (when/if this wins)
 

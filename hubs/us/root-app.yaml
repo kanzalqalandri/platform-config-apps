@@ -1,11 +1,10 @@
-# Bootstrap for the PROD hub (ArgoCD on gitops-c3, manages the prod region —
-# including gitops-c3 itself, registered in its own ArgoCD as a named cluster).
-# ⚠ App name is hub-prod ON PURPOSE (cutover adopts the live hub by name) —
-#   do NOT apply this while platform-config's hub-prod appsets are live.
+# Bootstrap for the US hub (ArgoCD on NV-MGMT, manages nv-k8s). Apply ONCE with kubectl on the
+# hub; from then on the hub self-manages every Application from git via this
+# app-of-apps.
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: hub-prod
+  name: hub-us
   namespace: argocd
 spec:
   project: default
@@ -15,7 +14,7 @@ spec:
     path: .
     helm:
       values: |
-        region: prod
+        region: us
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd

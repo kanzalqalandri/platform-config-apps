@@ -1,0 +1,4 @@
+# Cluster registry entry — see clusters/us/nv-k8s/config.yaml for the contract.
+# Owned by the dev hub (ArgoCD on dnv-mgmt).
+cloud: aws
+role: satellite        # the dev/qa satellite cluster

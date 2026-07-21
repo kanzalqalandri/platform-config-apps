@@ -1,0 +1,4 @@
+# Chart source ref for this tenant/app.
+appRepoURL: https://github.com/kanzalqalandri/gitops-demo-app
+chartRevision: main
+helmPath: helm

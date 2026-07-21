@@ -1,0 +1,4 @@
+tenantName: stark
+image:
+  tag: "plain-text"
+replicaCount: 1
